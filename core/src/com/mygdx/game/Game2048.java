@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Game2048 extends ApplicationAdapter {
-
+	private boolean initialized = false;
 	private static final int BOARD_SIZE = 4;
 	private static final int TILE_SIZE = 90;
 	private int[][] board;
@@ -19,6 +19,7 @@ public class Game2048 extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private Texture mainMenuBackgroundTexture;
+	private Texture gameboardTexture;
 	@Override
 	public void create() {
 		board = new int[BOARD_SIZE][BOARD_SIZE];
@@ -27,6 +28,8 @@ public class Game2048 extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		mainMenuBackgroundTexture = new Texture("mainMenuBackground.png");
+		gameboardTexture = new Texture("gameTemplate.png");
+		initialize();
 	}
 
 	@Override
@@ -50,6 +53,11 @@ public class Game2048 extends ApplicationAdapter {
 		}
 	}
 
+	private void initialize() {
+		drawMainMenu(); // Wywołaj drawMainMenu() w initialize()
+		initialized = true; // Ustaw flagę na true, aby wiedzieć, że już zainicjowano
+	}
+
 	private void update() {
 		// Add any additional logic for updating the game state here
 	}
@@ -63,11 +71,25 @@ public class Game2048 extends ApplicationAdapter {
 
 		batch.draw(mainMenuBackgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		handleMainMenu();
-
 		batch.end();
+		handleMainMenu();
 	}
 
+	private void handleGame(){
+		System.out.println("EOO");
+	}
+	private void drawGameBoard(){
+		//Gdx.gl.glClearColor(1, 1, 1, 1);
+		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+
+		batch.draw(gameboardTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+		batch.end();
+		handleGame();
+	}
 	private void handleMainMenu() {
 		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 			float mouseX = Gdx.input.getX();
@@ -85,7 +107,8 @@ public class Game2048 extends ApplicationAdapter {
 			if (mouseX >= startButtonX && mouseX <= startButtonX + clickAreaWidth &&
 					mouseY >= startButtonY && mouseY <= startButtonY + clickAreaHeight) {
 				// Kliknięcie miało miejsce w wyznaczonym obszarze
-				System.out.println("Start Game");
+				mainMenuBackgroundTexture.dispose();
+				drawGameBoard();
 			} else if (mouseX >= quitButtonX && mouseX <= quitButtonX + clickAreaWidth &&
 					mouseY >= quitButtonY && mouseY <= quitButtonY + clickAreaHeight){
 				// Kliknięcie miało miejsce w wyznaczonym obszarze
