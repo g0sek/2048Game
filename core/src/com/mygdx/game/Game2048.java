@@ -86,16 +86,16 @@ public class Game2048 extends ApplicationAdapter {
 			for (int x = 0; x < BOARD_SIZE; x++) {
 				int tileValue = board[y][x];
 
-				if (tileValue >= 0) {
+				if (tileValue > 0) {
 					// Wybierz odpowiednią teksturę na podstawie wartości w macierzy
 					Texture tileTexture = getTileTexture(tileValue);
 
 					// Oblicz koordynaty x i y na podstawie indeksu w macierzy
-					float tileX = 93 + x * tileSize;
-					float tileY = 386 - y * tileSize;
+					float tileX = 47 + x * tileSize;
+					float tileY = 340 - y * tileSize;
 
 					// Narysuj kafelek na ekranie
-					batch.draw(tileTexture, tileX, tileY, tileSize, tileSize);
+					batch.draw(tileTexture, tileX, tileY, 92, 92);
 				}
 			}
 		}
@@ -105,8 +105,6 @@ public class Game2048 extends ApplicationAdapter {
 	private Texture getTileTexture(int tileValue) {
 		// W zależności od wartości kafelka, wybierz odpowiednią teksturę
 		switch (tileValue) {
-			case 0:
-				return new Texture("Tile8.png");
 			case 2:
 				return new Texture("Tile2.png");
 			case 4:
@@ -211,21 +209,170 @@ public class Game2048 extends ApplicationAdapter {
 		}
 	}
 
-	private void moveLeft() {
-		// Add logic to move tiles left
-	}
-
 	private void moveRight() {
-		// Add logic to move tiles right
+		if (!canMoveRight()) {
+			return;
+		}
+
+		for (int y = 0; y < BOARD_SIZE; y++) {
+			for (int x = BOARD_SIZE - 2; x >= 0; x--) {
+				if (board[y][x] > 0) {
+					int value = board[y][x];
+					int targetX = x;
+
+					while (targetX < BOARD_SIZE - 1 && board[y][targetX + 1] == 0) {
+						targetX++;
+					}
+
+					if (targetX < BOARD_SIZE - 1 && board[y][targetX + 1] == value) {
+						board[y][targetX + 1] *= 2;
+						board[y][x] = 0;
+					} else {
+						board[y][targetX] = value;
+						if (targetX != x) {
+							board[y][x] = 0;
+						}
+					}
+				}
+			}
+		}
+		spawnRandomTile();
 	}
 
 	private void moveUp() {
-		// Add logic to move tiles up
+		if (!canMoveUp()) {
+			return;
+		}
+
+		for (int x = 0; x < BOARD_SIZE; x++) {
+			for (int y = 1; y < BOARD_SIZE; y++) {
+				if (board[y][x] > 0) {
+					int value = board[y][x];
+					int targetY = y;
+
+					while (targetY > 0 && board[targetY - 1][x] == 0) {
+						targetY--;
+					}
+
+					if (targetY > 0 && board[targetY - 1][x] == value) {
+						board[targetY - 1][x] *= 2;
+						board[y][x] = 0;
+					} else {
+						board[targetY][x] = value;
+						if (targetY != y) {
+							board[y][x] = 0;
+						}
+					}
+				}
+			}
+		}
+		spawnRandomTile();
 	}
 
 	private void moveDown() {
-		// Add logic to move tiles down
+		if (!canMoveDown()) {
+			return;
+		}
+
+		for (int x = 0; x < BOARD_SIZE; x++) {
+			for (int y = BOARD_SIZE - 2; y >= 0; y--) {
+				if (board[y][x] > 0) {
+					int value = board[y][x];
+					int targetY = y;
+
+					while (targetY < BOARD_SIZE - 1 && board[targetY + 1][x] == 0) {
+						targetY++;
+					}
+
+					if (targetY < BOARD_SIZE - 1 && board[targetY + 1][x] == value) {
+						board[targetY + 1][x] *= 2;
+						board[y][x] = 0;
+					} else {
+						board[targetY][x] = value;
+						if (targetY != y) {
+							board[y][x] = 0;
+						}
+					}
+				}
+			}
+		}
+		spawnRandomTile();
 	}
+
+	private void moveLeft() {
+		if (!canMoveLeft()) {
+			return;
+		}
+
+		for (int y = 0; y < BOARD_SIZE; y++) {
+			for (int x = 1; x < BOARD_SIZE; x++) {
+				if (board[y][x] > 0) {
+					int value = board[y][x];
+					int targetX = x;
+
+					while (targetX > 0 && board[y][targetX - 1] == 0) {
+						targetX--;
+					}
+
+					if (targetX > 0 && board[y][targetX - 1] == value) {
+						board[y][targetX - 1] *= 2;
+						board[y][x] = 0;
+					} else {
+						board[y][targetX] = value;
+						if (targetX != x) {
+							board[y][x] = 0;
+						}
+					}
+				}
+			}
+		}
+		spawnRandomTile();
+	}
+
+	private boolean canMoveRight() {
+		for (int y = 0; y < BOARD_SIZE; y++) {
+			for (int x = BOARD_SIZE - 2; x >= 0; x--) {
+				if (board[y][x] > 0 && (board[y][x + 1] == 0 || board[y][x + 1] == board[y][x])) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean canMoveUp() {
+		for (int x = 0; x < BOARD_SIZE; x++) {
+			for (int y = 1; y < BOARD_SIZE; y++) {
+				if (board[y][x] > 0 && (board[y - 1][x] == 0 || board[y - 1][x] == board[y][x])) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean canMoveDown() {
+		for (int x = 0; x < BOARD_SIZE; x++) {
+			for (int y = BOARD_SIZE - 2; y >= 0; y--) {
+				if (board[y][x] > 0 && (board[y + 1][x] == 0 || board[y + 1][x] == board[y][x])) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean canMoveLeft() {
+		for (int y = 0; y < BOARD_SIZE; y++) {
+			for (int x = 1; x < BOARD_SIZE; x++) {
+				if (board[y][x] > 0 && (board[y][x - 1] == 0 || board[y][x - 1] == board[y][x])) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 
 	@Override
 	public void dispose() {
