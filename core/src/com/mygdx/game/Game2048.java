@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Game2048 extends ApplicationAdapter {
-	private boolean initialized = false;
+	private boolean startGame = false;
 	private static final int BOARD_SIZE = 4;
 	private static final int TILE_SIZE = 90;
 	private int[][] board;
@@ -29,14 +29,17 @@ public class Game2048 extends ApplicationAdapter {
 		font = new BitmapFont();
 		mainMenuBackgroundTexture = new Texture("mainMenuBackground.png");
 		gameboardTexture = new Texture("gameTemplate.png");
-		initialize();
 	}
 
 	@Override
 	public void render() {
 		handleInput();
 		update();
-		drawMainMenu();
+		if (!startGame) {
+			drawMainMenu(); // Wywołaj drawMainMenu(), jeśli jeszcze nie zainicjowano
+		} else {
+			drawGameBoard(); // Dodaj rysowanie planszy gry w miejsce drawMainMenu()
+		}
 	}
 	private void handleInput() {
 		if (Gdx.input.isKeyJustPressed(Keys.LEFT)) {
@@ -51,11 +54,6 @@ public class Game2048 extends ApplicationAdapter {
 		if (Gdx.input.isKeyJustPressed(Keys.DOWN)) {
 			moveDown();
 		}
-	}
-
-	private void initialize() {
-		drawMainMenu(); // Wywołaj drawMainMenu() w initialize()
-		initialized = true; // Ustaw flagę na true, aby wiedzieć, że już zainicjowano
 	}
 
 	private void update() {
@@ -76,11 +74,11 @@ public class Game2048 extends ApplicationAdapter {
 	}
 
 	private void handleGame(){
-		System.out.println("EOO");
+
 	}
 	private void drawGameBoard(){
-		//Gdx.gl.glClearColor(1, 1, 1, 1);
-		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
@@ -108,6 +106,7 @@ public class Game2048 extends ApplicationAdapter {
 					mouseY >= startButtonY && mouseY <= startButtonY + clickAreaHeight) {
 				// Kliknięcie miało miejsce w wyznaczonym obszarze
 				mainMenuBackgroundTexture.dispose();
+				startGame = true;
 				drawGameBoard();
 			} else if (mouseX >= quitButtonX && mouseX <= quitButtonX + clickAreaWidth &&
 					mouseY >= quitButtonY && mouseY <= quitButtonY + clickAreaHeight){
