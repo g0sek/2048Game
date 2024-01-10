@@ -1,10 +1,9 @@
 package com.mygdx.game;
-
+import java.util.Random;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Game2048 extends ApplicationAdapter {
 	private boolean startGame = false;
+	private boolean starterTilesRendered = false;
 	private static final int BOARD_SIZE = 4;
 	private static final int TILE_SIZE = 90;
 	private int[][] board;
@@ -20,6 +20,7 @@ public class Game2048 extends ApplicationAdapter {
 	private BitmapFont font;
 	private Texture mainMenuBackgroundTexture;
 	private Texture gameboardTexture;
+	private final Random random = new Random();
 	@Override
 	public void create() {
 		board = new int[BOARD_SIZE][BOARD_SIZE];
@@ -39,6 +40,11 @@ public class Game2048 extends ApplicationAdapter {
 			drawMainMenu(); // Wywołaj drawMainMenu(), jeśli jeszcze nie zainicjowano
 		} else {
 			drawGameBoard(); // Dodaj rysowanie planszy gry w miejsce drawMainMenu()
+			if (!starterTilesRendered) {
+				spawnRandomTile(); // Wylosuj kafelki tylko raz na początku gry
+				spawnRandomTile();
+				starterTilesRendered = true; // Ustaw flagę na true, aby wiedzieć, że kafelki zostały już wylosowane
+			}
 		}
 	}
 	private void handleInput() {
@@ -61,9 +67,6 @@ public class Game2048 extends ApplicationAdapter {
 	}
 
 	private void drawMainMenu() {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 
@@ -74,12 +77,65 @@ public class Game2048 extends ApplicationAdapter {
 	}
 
 	private void handleGame(){
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
 
+		float tileSize = 98; // Rozmiar kafelka
+
+		for (int y = 0; y < BOARD_SIZE; y++) {
+			for (int x = 0; x < BOARD_SIZE; x++) {
+				int tileValue = board[y][x];
+
+				if (tileValue >= 0) {
+					// Wybierz odpowiednią teksturę na podstawie wartości w macierzy
+					Texture tileTexture = getTileTexture(tileValue);
+
+					// Oblicz koordynaty x i y na podstawie indeksu w macierzy
+					float tileX = 93 + x * tileSize;
+					float tileY = 386 - y * tileSize;
+
+					// Narysuj kafelek na ekranie
+					batch.draw(tileTexture, tileX, tileY, tileSize, tileSize);
+				}
+			}
+		}
+
+		batch.end();
+	}
+	private Texture getTileTexture(int tileValue) {
+		// W zależności od wartości kafelka, wybierz odpowiednią teksturę
+		switch (tileValue) {
+			case 0:
+				return new Texture("Tile8.png");
+			case 2:
+				return new Texture("Tile2.png");
+			case 4:
+				return new Texture("Tile4.png");
+			case 8:
+				return new Texture("Tile8.png");
+			case 16:
+				return new Texture("Tile16.png");
+			case 32:
+				return new Texture("Tile32.png");
+			case 64:
+				return new Texture("Tile64.png");
+			case 128:
+				return new Texture("Tile128.png");
+			case 256:
+				return new Texture("Tile265.png");
+			case 512:
+				return new Texture("Tile512.png");
+			case 1024:
+				return new Texture("Tile1024.png");
+			case 2048:
+				return new Texture("Tile2048.png");
+			// Dodaj inne przypadki dla kolejnych wartości kafelków
+			// ...
+			default:
+				return null; // Domyślna tekstura, jeśli wartość nie pasuje do żadnego przypadku
+		}
 	}
 	private void drawGameBoard(){
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 
@@ -87,6 +143,45 @@ public class Game2048 extends ApplicationAdapter {
 
 		batch.end();
 		handleGame();
+	}
+	private void spawnRandomTile(){
+		int[] emptyPositionsX = new int[BOARD_SIZE * BOARD_SIZE];
+		int[] emptyPositionsY = new int[BOARD_SIZE * BOARD_SIZE];
+		int emptyCount = 0;
+
+		for (int y = 0; y < BOARD_SIZE; y++) {
+			for (int x = 0; x < BOARD_SIZE; x++) {
+				if (board[y][x] == 0) {
+					emptyPositionsX[emptyCount] = x;
+					emptyPositionsY[emptyCount] = y;
+					emptyCount++;
+				}
+			}
+		}
+
+		if (emptyCount > 0) {
+			int randomIndex = random.nextInt(emptyCount);
+			int randomX = emptyPositionsX[randomIndex];
+			int randomY = emptyPositionsY[randomIndex];
+
+			// Losuj wartość zgodnie z prawdopodobieństwem
+			double randomValue = random.nextDouble();
+			int tileValue = (randomValue < 0.9) ? 2 : 4;
+
+			// Wpisz wartość do macierzy
+			board[randomY][randomX] = tileValue;
+			printBoard();
+		}
+
+	}
+
+	private void printBoard() {
+		for (int y = 0; y < BOARD_SIZE; y++) {
+			for (int x = 0; x < BOARD_SIZE; x++) {
+				System.out.print(board[y][x] + "\t");
+			}
+			System.out.println();
+		}
 	}
 	private void handleMainMenu() {
 		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -111,13 +206,9 @@ public class Game2048 extends ApplicationAdapter {
 			} else if (mouseX >= quitButtonX && mouseX <= quitButtonX + clickAreaWidth &&
 					mouseY >= quitButtonY && mouseY <= quitButtonY + clickAreaHeight){
 				// Kliknięcie miało miejsce w wyznaczonym obszarze
-				System.out.println("Quit Game");
+				Gdx.app.exit();
 			}
 		}
-	}
-
-	private void spawnTile() {
-		// Add logic to spawn a new tile on the board
 	}
 
 	private void moveLeft() {
