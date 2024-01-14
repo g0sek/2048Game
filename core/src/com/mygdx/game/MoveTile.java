@@ -1,10 +1,6 @@
 package com.mygdx.game;
 
 public class MoveTile {
-    private Score score;
-    public MoveTile(GameLogic gameLogic) {
-        this.score = new Score(gameLogic);
-    }
     void moveRight(GameLogic gameLogic) {
         if (!canMoveRight(gameLogic)) {
             return;
@@ -23,7 +19,7 @@ public class MoveTile {
                     if (targetX < gameLogic.BOARD_SIZE - 1 && gameLogic.board[y][targetX + 1] == value) {
                         int newValue = gameLogic.board[y][targetX + 1] *= 2;
                         gameLogic.board[y][x] = 0;
-                        score.calculateScore(newValue);
+                        gameLogic.score.calculateScore(newValue);
                     } else {
                         gameLogic.board[y][targetX] = value;
                         if (targetX != x) {
@@ -54,7 +50,7 @@ public class MoveTile {
                     if (targetY > 0 && gameLogic.board[targetY - 1][x] == value) {
                         int newValue = gameLogic.board[targetY - 1][x] *= 2;
                         gameLogic.board[y][x] = 0;
-                        score.calculateScore(newValue);
+                        gameLogic.score.calculateScore(newValue);
                     } else {
                         gameLogic.board[targetY][x] = value;
                         if (targetY != y) {
@@ -85,7 +81,7 @@ public class MoveTile {
                     if (targetY < gameLogic.BOARD_SIZE - 1 && gameLogic.board[targetY + 1][x] == value) {
                         int newValue = gameLogic.board[targetY + 1][x] *= 2;
                         gameLogic.board[y][x] = 0;
-                        score.calculateScore(newValue);
+                        gameLogic.score.calculateScore(newValue);
                     } else {
                         gameLogic.board[targetY][x] = value;
                         if (targetY != y) {
@@ -115,7 +111,7 @@ public class MoveTile {
                     if (targetX > 0 && gameLogic.board[y][targetX - 1] == value) {
                         int newValue = gameLogic.board[y][targetX - 1] *= 2;
                         gameLogic.board[y][x] = 0;
-                        score.calculateScore(newValue);
+                        gameLogic.score.calculateScore(newValue);
                     } else {
                         gameLogic.board[y][targetX] = value;
                         if (targetX != x) {

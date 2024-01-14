@@ -5,15 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 
 public class InputHandler {
-    private MoveTile moveTile;
-    public GameLogic gameLogic;
-
-    public InputHandler(GameLogic gameLogic) {
-        this.moveTile = new MoveTile(gameLogic);
-        this.gameLogic = gameLogic;
-    }
-
     public void handleInput(GameLogic gameLogic) {
+        MoveTile moveTile = new MoveTile();
         if (Gdx.input.isKeyJustPressed(Keys.LEFT)) {
             moveTile.moveLeft(gameLogic);
         }

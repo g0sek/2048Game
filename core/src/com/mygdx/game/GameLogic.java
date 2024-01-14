@@ -13,11 +13,13 @@ public class GameLogic {
     private final DrawOnScreen drawOnScreen;
     private final TextureManager textureManager;
     private final CameraHandler cameraHandler;
+    public final Score score;
 
-    public GameLogic(DrawOnScreen drawOnScreen, TextureManager textureManager, CameraHandler cameraHandler) {
+    public GameLogic(DrawOnScreen drawOnScreen, TextureManager textureManager, CameraHandler cameraHandler, Score score) {
         this.drawOnScreen = drawOnScreen;
         this.textureManager = textureManager;
         this.cameraHandler = cameraHandler;
+        this.score = score;
         board = new int[BOARD_SIZE][BOARD_SIZE];
 
     }
@@ -32,6 +34,10 @@ public class GameLogic {
     }
     public int[][] getBoard() {
         return board;
+    }
+
+    public int getScore(){
+        return score.totalScore;
     }
     public void spawnRandomTile(){
         int[] emptyPositionsX = new int[BOARD_SIZE * BOARD_SIZE];

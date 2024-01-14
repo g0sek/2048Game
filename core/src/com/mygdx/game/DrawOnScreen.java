@@ -3,7 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import jdk.tools.jmod.Main;
 
 public class DrawOnScreen {
     public final SpriteBatch batch;
@@ -39,7 +38,7 @@ public class DrawOnScreen {
         float scoreY = 100;
 
         // Rysuj wynik
-        fontHandler.font.draw(batch, "Score: " + score.totalScore, scoreX, scoreY);
+        fontHandler.font.draw(batch, "" + score.totalScore, scoreX, scoreY);
 
         batch.end();
     }

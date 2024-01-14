@@ -6,25 +6,24 @@ public class Game2048 extends ApplicationAdapter {
 	private InputHandler inputHandler;
 	private MainMenu mainMenu;
 	private DrawOnScreen drawOnScreen;
-	private TextureManager textureManager;
-	private GameLogic gameLogic;
-	private CameraHandler cameraHandler;
-
-	@Override
+    private GameLogic gameLogic;
+   public Score score = new Score();
+    @Override
 	public void create() {
 		initializeDependencies();
 	}
 
 	private void initializeDependencies() {
-		textureManager = new TextureManager();
-		cameraHandler = new CameraHandler();
-		gameLogic = new GameLogic(drawOnScreen, textureManager, cameraHandler);
-		drawOnScreen = new DrawOnScreen(cameraHandler, new FontHandler(), new Score(gameLogic), new MainMenu(drawOnScreen, textureManager), textureManager, gameLogic);
+        TextureManager textureManager = new TextureManager();
+        CameraHandler cameraHandler = new CameraHandler();
+		FontHandler fontHandler = new FontHandler();
+		gameLogic = new GameLogic(drawOnScreen, textureManager, cameraHandler, score);
+		drawOnScreen = new DrawOnScreen(cameraHandler, fontHandler, score, new MainMenu(drawOnScreen, textureManager), textureManager, gameLogic);
 		mainMenu = new MainMenu(drawOnScreen, textureManager);
 
-		inputHandler = new InputHandler(gameLogic);
-		drawOnScreen = new DrawOnScreen(cameraHandler, new FontHandler(), new Score(gameLogic), new MainMenu(null, textureManager), textureManager, null);
-		gameLogic = new GameLogic(drawOnScreen, textureManager, cameraHandler);
+		inputHandler = new InputHandler();
+		drawOnScreen = new DrawOnScreen(cameraHandler, new FontHandler(), score, new MainMenu(null, textureManager), textureManager, null);
+		gameLogic = new GameLogic(drawOnScreen, textureManager, cameraHandler, score);
 		mainMenu = new MainMenu(drawOnScreen, textureManager);
 
 		// Aktualizacja drawOnScreen i gameLogic w MainMenu
@@ -44,6 +43,7 @@ public class Game2048 extends ApplicationAdapter {
 			drawOnScreen.drawMainMenu(); // Wywołaj drawMainMenu(), jeśli jeszcze nie zainicjowano
 		} else {
 			drawOnScreen.drawGameBoard(); // Dodaj rysowanie planszy gry w miejsce drawMainMenu()
+			drawOnScreen.drawScore();
 			if (!gameLogic.starterTilesRendered) {
 				gameLogic.spawnRandomTile(); // Wylosuj kafelki tylko raz na początku gry
 				gameLogic.spawnRandomTile();
