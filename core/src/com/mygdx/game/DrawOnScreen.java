@@ -1,14 +1,13 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class DrawOnScreen {
     public final SpriteBatch batch;
     private final CameraHandler cameraHandler;
-    private FontHandler fontHandler;
-    private Score score;
+    private final FontHandler fontHandler;
+    private final Score score;
     public MainMenu mainMenu;
     private final TextureManager textureManager;
     public GameLogic gameLogic;
@@ -22,7 +21,6 @@ public class DrawOnScreen {
         this.mainMenu = mainMenu;
         this.textureManager = textureManager;
         this.gameLogic = gameLogic;
-
         // Aktualizacja drawOnScreen w mainMenu
         if (mainMenu != null) {
             mainMenu.drawOnScreen = this;
@@ -33,10 +31,8 @@ public class DrawOnScreen {
         batch.setProjectionMatrix(cameraHandler.camera.combined);
         batch.begin();
 
-        // Wstaw swoje współrzędne i preferencje dotyczące czcionki
-        float scoreX = 100;
-        float scoreY = 100;
-
+        float scoreX = 380;
+        float scoreY = 525;
         // Rysuj wynik
         fontHandler.font.draw(batch, "" + score.totalScore, scoreX, scoreY);
 
