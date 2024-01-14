@@ -45,12 +45,9 @@ public class Game2048 extends ApplicationAdapter {
 		} else {
 			drawOnScreen.drawGameBoard(); // Dodaj rysowanie planszy gry w miejsce drawMainMenu()
 			if (!gameLogic.starterTilesRendered) {
-				System.out.println("Generuje dwa");
 				gameLogic.spawnRandomTile(); // Wylosuj kafelki tylko raz na początku gry
 				gameLogic.spawnRandomTile();
 				gameLogic.starterTilesRendered = true; // Ustaw flagę na true, aby wiedzieć, że kafelki zostały już wylosowane
-				System.out.println("W game2048");
-				gameLogic.printBoard();
 			}
 		}
 	}

@@ -14,13 +14,10 @@ public class InputHandler {
     }
 
     public void handleInput(GameLogic gameLogic) {
-        gameLogic = gameLogic;
         if (Gdx.input.isKeyJustPressed(Keys.LEFT)) {
             moveTile.moveLeft(gameLogic);
         }
         if (Gdx.input.isKeyJustPressed(Keys.RIGHT)) {
-            System.out.println("W inputhandler");
-            gameLogic.printBoard();
             moveTile.moveRight(gameLogic);
         }
         if (Gdx.input.isKeyJustPressed(Keys.UP)) {

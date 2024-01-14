@@ -2,15 +2,10 @@ package com.mygdx.game;
 
 public class MoveTile {
     private Score score;
-    private int[][] boardTemp;
     public MoveTile(GameLogic gameLogic) {
         this.score = new Score(gameLogic);
-        System.out.println("gameLogic: " + gameLogic);
-        System.out.println("W movetile");
-        gameLogic.printBoard();
     }
     void moveRight(GameLogic gameLogic) {
-        System.out.println("Prawo");
         if (!canMoveRight(gameLogic)) {
             return;
         }
@@ -132,37 +127,14 @@ public class MoveTile {
         }
         gameLogic.spawnRandomTile();
     }
-    public void printBoard(GameLogic gameLogic) {
-        int[][] board = gameLogic.getBoard(); // Uzyskaj dostęp do planszy z obiektu GameLogic
-        for (int y = 0; y < gameLogic.BOARD_SIZE; y++) {
-            for (int x = 0; x < gameLogic.BOARD_SIZE; x++) {
-                System.out.print(board[y][x] + "\t");
-            }
-            System.out.println();
-        }
-    }
     private boolean canMoveRight(GameLogic gameLogic) {
-        System.out.println("Moge w prawo?");
-        printBoard(gameLogic);
         for (int y = 0; y < gameLogic.BOARD_SIZE; y++) {
-            System.out.println("gameLogic.BOARD_SIZE " + gameLogic.BOARD_SIZE);
             for (int x = gameLogic.BOARD_SIZE - 2; x >= 0; x--) {
-                System.out.println("y = " + y);
-                System.out.println("x = " + x);
-                System.out.println("gameLogic.board[y][x] > 0? " + gameLogic.board[y][x]);
-                System.out.println("gameLogic.board[y][x + 1] == 0? " + gameLogic.board[y][x + 1]);
-                System.out.println("gameLogic.board[y][x + 1] ?" + gameLogic.board[y][x + 1]);
-                System.out.println("gameLogic.board[y][x]? " + gameLogic.board[y][x]);
-                System.out.println("_____________");
                 if (gameLogic.board[y][x] > 0 && (gameLogic.board[y][x + 1] == 0 || gameLogic.board[y][x + 1] == gameLogic.board[y][x])) {
-
-                    System.out.println("Moge?");
                     return true;
                 }
             }
         }
-        System.out.println("gameLogic: " + gameLogic);
-        System.out.println("Nie moge");
         return false;
     }
 

@@ -10,10 +10,9 @@ public class GameLogic {
     public static boolean startGame = false;
     public boolean starterTilesRendered = false;
     private final Random random = new Random();
-    private int generatedTile;
-    private DrawOnScreen drawOnScreen;
-    private TextureManager textureManager;
-    private CameraHandler cameraHandler;
+    private final DrawOnScreen drawOnScreen;
+    private final TextureManager textureManager;
+    private final CameraHandler cameraHandler;
 
     public GameLogic(DrawOnScreen drawOnScreen, TextureManager textureManager, CameraHandler cameraHandler) {
         this.drawOnScreen = drawOnScreen;
@@ -59,12 +58,8 @@ public class GameLogic {
 
             // Wpisz wartość do macierzy
             board[randomY][randomX] = tileValue;
-            System.out.println("W gamelogic w random tile");
-            printBoard();
-            generatedTile = tileValue;
 
         }
-        System.out.println("Wygenerowany: " + generatedTile);
     }
     public void calculateTilePosition(){
         drawOnScreen.batch.setProjectionMatrix(cameraHandler.camera.combined);
