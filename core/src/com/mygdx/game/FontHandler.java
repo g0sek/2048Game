@@ -11,8 +11,8 @@ public class FontHandler {
     public FontHandler() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Candara_Bold.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 24;
-        parameter.color = Color.BLACK;
+        parameter.size = 36;
+        parameter.color = Color.valueOf("776e65");
         font = generator.generateFont(parameter);
         generator.dispose();
     }

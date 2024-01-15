@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class DrawOnScreen {
@@ -31,10 +32,12 @@ public class DrawOnScreen {
         batch.setProjectionMatrix(cameraHandler.camera.combined);
         batch.begin();
 
-        float scoreX = 380;
+        String scoreText = "" + score.totalScore;
+        GlyphLayout layout = new GlyphLayout(fontHandler.font, scoreText);
+        float scoreX = 380 - layout.width / 2;  // Wycentrowanie tekstu
         float scoreY = 525;
         // Rysuj wynik
-        fontHandler.font.draw(batch, "" + score.totalScore, scoreX, scoreY);
+        fontHandler.font.draw(batch, scoreText, scoreX, scoreY);
 
         batch.end();
     }
