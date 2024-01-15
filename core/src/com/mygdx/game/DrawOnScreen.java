@@ -12,13 +12,17 @@ public class DrawOnScreen {
     private final Animations animations;
     public MainMenu mainMenu;
     public EndGame endGame;
+    public WinGame winGame;
     private final TextureManager textureManager;
     public GameLogic gameLogic;
-    boolean animationEndgameStart = false;
+    public boolean animationEndgameStart = false;
+    public boolean animationWingameStart = false;
+    public boolean animationDrawboard = false;
+    public boolean winGameAchieved = false;
 
 
     public DrawOnScreen(CameraHandler cameraHandler, FontHandler fontHandler,
-                        Score score, MainMenu mainMenu, TextureManager textureManager, GameLogic gameLogic, EndGame endGame, Animations animations) {
+                        Score score, MainMenu mainMenu, TextureManager textureManager, GameLogic gameLogic, EndGame endGame, Animations animations, WinGame winGame) {
         this.batch = new SpriteBatch();
         this.cameraHandler = cameraHandler;
         this.fontHandler = fontHandler;
@@ -28,6 +32,7 @@ public class DrawOnScreen {
         this.gameLogic = gameLogic;
         this.endGame = endGame;
         this.animations = animations;
+        this.winGame = winGame;
 
         // Aktualizacja drawOnScreen w mainMenu
         if (mainMenu != null) {
@@ -44,7 +49,7 @@ public class DrawOnScreen {
         GlyphLayout layout = new GlyphLayout(fontHandler.font, scoreText);
         float scoreX = 0;
         float scoreY = 0;
-        if(endGame.endGame){
+        if(endGame.endGame || winGame.winGame){
             scoreX = 290 - layout.width / 2;  // Wycentrowanie tekstu
             scoreY = 350;
             score.loadHighScore();
@@ -65,7 +70,7 @@ public class DrawOnScreen {
         GlyphLayout layout = new GlyphLayout(fontHandler.font, highestScoreText);
         float highestScoreX = 0;
         float highestScoreY = 0;
-        if(endGame.endGame){
+        if(endGame.endGame || winGame.winGame){
             highestScoreX = 250 - layout.width / 2;  // Wycentrowanie tekstu
             highestScoreY = 430;
         }
@@ -78,7 +83,11 @@ public class DrawOnScreen {
         batch.setProjectionMatrix(cameraHandler.camera.combined);
         batch.begin();
 
-        batch.draw(textureManager.gameboardTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        if(!animationDrawboard) {
+            animations.create(textureManager.gameboardTexture);
+            animationDrawboard = true;
+        }
+        animations.render();
         batch.end();
         gameLogic.calculateTilePosition();
     }
@@ -93,7 +102,7 @@ public class DrawOnScreen {
         mainMenu.handleMainMenu();
     }
     public void drawEndGame(){
-
+        animationDrawboard = false;
         batch.setProjectionMatrix(cameraHandler.camera.combined);
         batch.begin();
 
@@ -102,7 +111,6 @@ public class DrawOnScreen {
             animationEndgameStart = true;
         }
         animations.render();
-        //batch.draw(textureManager.endGameboardTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         batch.end();
         if(!endGame.endGame) {
@@ -112,6 +120,29 @@ public class DrawOnScreen {
         if(endGame.handleEndGame()){
             gameLogic.restartGame();
             animationEndgameStart = false;
+        }
+    }
+    public void drawWinGame(){
+        if(!winGameAchieved){
+            animationDrawboard = false;
+            batch.setProjectionMatrix(cameraHandler.camera.combined);
+            batch.begin();
+
+            if(!animationWingameStart) {
+                animations.create(textureManager.winGameTexture);
+                animationWingameStart = true;
+            }
+            animations.render();
+
+            batch.end();
+            if(!winGame.winGame) {
+                winGame.winGame = true;
+            }
+
+            if(winGame.handleWinGame()) {
+                winGameAchieved = true;
+                animationWingameStart = false;
+            }
         }
     }
 }

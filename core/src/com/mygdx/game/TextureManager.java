@@ -6,10 +6,12 @@ public class TextureManager {
     public final Texture mainMenuBackgroundTexture;
     public final Texture gameboardTexture;
     public Texture endGameboardTexture;
+    public Texture winGameTexture;
     public TextureManager() {
         mainMenuBackgroundTexture = new Texture("mainMenuBackground.png");
         gameboardTexture = new Texture("gameTemplate.png");
         endGameboardTexture = new Texture("endGameTemplate.png");
+        winGameTexture = new Texture("winGameTemplate.png");
     }
     public Texture getTileTexture(int tileValue) {
         // W zależności od wartości kafelka, wybierz odpowiednią teksturę
@@ -36,6 +38,10 @@ public class TextureManager {
                 return new Texture("Tile1024.png");
             case 2048:
                 return new Texture("Tile2048.png");
+            case 4096:
+                return new Texture("Tile4096.png");
+            case 8192:
+                return new Texture("Tile8192.png");
             default:
                 return null; // Domyślna tekstura, jeśli wartość nie pasuje do żadnego przypadku
         }

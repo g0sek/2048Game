@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 public class MoveTile {
+    private boolean tile2048Achieved = false;
     void moveRight(GameLogic gameLogic) {
         if (!canMoveRight(gameLogic)) {
             return;
@@ -20,8 +21,9 @@ public class MoveTile {
                         int newValue = gameLogic.board[y][targetX + 1] *= 2;
                         gameLogic.board[y][x] = 0;
                         gameLogic.score.calculateScore(newValue);
-                        if(newValue == 2048){
-
+                        if(newValue == 2048 && !tile2048Achieved){
+                            gameLogic.winGame();
+                            tile2048Achieved = true;
                         }
                     } else {
                         gameLogic.board[y][targetX] = value;
@@ -57,6 +59,10 @@ public class MoveTile {
                         int newValue = gameLogic.board[targetY - 1][x] *= 2;
                         gameLogic.board[y][x] = 0;
                         gameLogic.score.calculateScore(newValue);
+                        if(newValue == 2048 && !tile2048Achieved){
+                            gameLogic.winGame();
+                            tile2048Achieved = true;
+                        }
                     } else {
                         gameLogic.board[targetY][x] = value;
                         if (targetY != y) {
@@ -91,6 +97,10 @@ public class MoveTile {
                         int newValue = gameLogic.board[targetY + 1][x] *= 2;
                         gameLogic.board[y][x] = 0;
                         gameLogic.score.calculateScore(newValue);
+                        if(newValue == 2048 && !tile2048Achieved){
+                            gameLogic.winGame();
+                            tile2048Achieved = true;
+                        }
                     } else {
                         gameLogic.board[targetY][x] = value;
                         if (targetY != y) {
@@ -124,6 +134,10 @@ public class MoveTile {
                         int newValue = gameLogic.board[y][targetX - 1] *= 2;
                         gameLogic.board[y][x] = 0;
                         gameLogic.score.calculateScore(newValue);
+                        if(newValue == 2048 && !tile2048Achieved){
+                            gameLogic.winGame();
+                            tile2048Achieved = true;
+                        }
                     } else {
                         gameLogic.board[y][targetX] = value;
                         if (targetX != x) {

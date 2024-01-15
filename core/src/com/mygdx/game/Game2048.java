@@ -8,6 +8,7 @@ public class Game2048 extends ApplicationAdapter {
 	private DrawOnScreen drawOnScreen;
     private GameLogic gameLogic;
 	private EndGame endGame;
+	private WinGame winGame;
    public Score score = new Score();
     @Override
 	public void create() {
@@ -21,8 +22,9 @@ public class Game2048 extends ApplicationAdapter {
 		Animations animations = new Animations();
 		gameLogic = new GameLogic(drawOnScreen, textureManager, cameraHandler, score);
 		endGame = new EndGame(drawOnScreen);
+		winGame = new WinGame(drawOnScreen);
 		inputHandler = new InputHandler();
-		drawOnScreen = new DrawOnScreen(cameraHandler, new FontHandler(), score, new MainMenu(null, textureManager), textureManager, null, endGame, animations);
+		drawOnScreen = new DrawOnScreen(cameraHandler, new FontHandler(), score, new MainMenu(null, textureManager), textureManager, null, endGame, animations, winGame);
 		gameLogic = new GameLogic(drawOnScreen, textureManager, cameraHandler, score);
 		mainMenu = new MainMenu(drawOnScreen, textureManager);
 
@@ -39,7 +41,10 @@ public class Game2048 extends ApplicationAdapter {
 		update();
 		if (!mainMenu.startGame) {
 			drawOnScreen.drawMainMenu(); // Wywołaj drawMainMenu(), jeśli jeszcze nie zainicjowano
-		} else if(!endGame.endGame){
+		}else if(winGame.winGame){
+			drawOnScreen.drawWinGame();
+			drawOnScreen.drawScore();
+		}else if(!endGame.endGame){
 			drawOnScreen.drawGameBoard(); // Dodaj rysowanie planszy gry w miejsce drawMainMenu()
 			drawOnScreen.drawScore();
 			if (!gameLogic.starterTilesRendered) {

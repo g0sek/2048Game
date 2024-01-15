@@ -82,6 +82,7 @@ public class GameLogic {
     public void gameOver(){
         drawOnScreen.drawEndGame();
     }
+    public void winGame() { drawOnScreen.drawWinGame(); }
 
     public void restartGame(){
         for (int y = 0; y < BOARD_SIZE; y++) {
