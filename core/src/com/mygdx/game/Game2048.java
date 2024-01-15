@@ -8,7 +8,6 @@ public class Game2048 extends ApplicationAdapter {
 	private DrawOnScreen drawOnScreen;
     private GameLogic gameLogic;
 	private EndGame endGame;
-	private TextureManager textureManager;
    public Score score = new Score();
     @Override
 	public void create() {
@@ -16,15 +15,14 @@ public class Game2048 extends ApplicationAdapter {
 	}
 
 	private void initializeDependencies() {
-        textureManager = new TextureManager();
+        TextureManager textureManager = new TextureManager();
         CameraHandler cameraHandler = new CameraHandler();
 		FontHandler fontHandler = new FontHandler();
+		Animations animations = new Animations();
 		gameLogic = new GameLogic(drawOnScreen, textureManager, cameraHandler, score);
-		drawOnScreen = new DrawOnScreen(cameraHandler, fontHandler, score, new MainMenu(drawOnScreen, textureManager), textureManager, gameLogic, null);
-		mainMenu = new MainMenu(drawOnScreen, textureManager);
-		endGame = new EndGame(drawOnScreen, textureManager);
+		endGame = new EndGame(drawOnScreen);
 		inputHandler = new InputHandler();
-		drawOnScreen = new DrawOnScreen(cameraHandler, new FontHandler(), score, new MainMenu(null, textureManager), textureManager, null, endGame);
+		drawOnScreen = new DrawOnScreen(cameraHandler, new FontHandler(), score, new MainMenu(null, textureManager), textureManager, null, endGame, animations);
 		gameLogic = new GameLogic(drawOnScreen, textureManager, cameraHandler, score);
 		mainMenu = new MainMenu(drawOnScreen, textureManager);
 
@@ -34,8 +32,6 @@ public class Game2048 extends ApplicationAdapter {
 		mainMenu.drawOnScreen = drawOnScreen;
 
 	}
-
-
 
 	@Override
 	public void render() {
@@ -52,7 +48,8 @@ public class Game2048 extends ApplicationAdapter {
 				gameLogic.starterTilesRendered = true; // Ustaw flagę na true, aby wiedzieć, że kafelki zostały już wylosowane
 			}
 		}else{
-			drawOnScreen.drawEndGame(textureManager);
+			drawOnScreen.drawEndGame();
+			drawOnScreen.drawScore();
 		}
 	}
 

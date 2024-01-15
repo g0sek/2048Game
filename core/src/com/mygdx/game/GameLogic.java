@@ -22,21 +22,8 @@ public class GameLogic {
         board = new int[BOARD_SIZE][BOARD_SIZE];
 
     }
-    public void printBoard() {
-        int[][] board = getBoard(); // Uzyskaj dostęp do planszy z obiektu GameLogic
-        for (int y = 0; y < BOARD_SIZE; y++) {
-            for (int x = 0; x < BOARD_SIZE; x++) {
-                System.out.print(board[y][x] + "\t");
-            }
-            System.out.println();
-        }
-    }
     public int[][] getBoard() {
         return board;
-    }
-
-    public int getScore(){
-        return score.totalScore;
     }
     public void spawnRandomTile(){
         int[] emptyPositionsX = new int[BOARD_SIZE * BOARD_SIZE];
@@ -93,8 +80,7 @@ public class GameLogic {
         drawOnScreen.batch.end();
     }
     public void gameOver(){
-        textureManager.reloadEndGameTexture();
-        drawOnScreen.drawEndGame(textureManager);
+        drawOnScreen.drawEndGame();
     }
 
     public void restartGame(){

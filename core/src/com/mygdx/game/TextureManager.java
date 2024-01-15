@@ -11,13 +11,6 @@ public class TextureManager {
         gameboardTexture = new Texture("gameTemplate.png");
         endGameboardTexture = new Texture("endGameTemplate.png");
     }
-    public void reloadEndGameTexture(){
-        System.out.println("trying to reload texture end game");
-        if(endGameboardTexture == null){
-            System.out.println("endGameTexture == null");
-            endGameboardTexture = new Texture("endGameTemplate.png");
-        }
-    }
     public Texture getTileTexture(int tileValue) {
         // W zależności od wartości kafelka, wybierz odpowiednią teksturę
         switch (tileValue) {
