@@ -20,6 +20,9 @@ public class MoveTile {
                         int newValue = gameLogic.board[y][targetX + 1] *= 2;
                         gameLogic.board[y][x] = 0;
                         gameLogic.score.calculateScore(newValue);
+                        if(newValue == 2048){
+
+                        }
                     } else {
                         gameLogic.board[y][targetX] = value;
                         if (targetX != x) {
@@ -30,6 +33,9 @@ public class MoveTile {
             }
         }
         gameLogic.spawnRandomTile();
+        if(!isAnyMoveLegal(gameLogic)){
+            gameLogic.gameOver();
+        }
     }
 
     void moveUp(GameLogic gameLogic) {
@@ -61,6 +67,9 @@ public class MoveTile {
             }
         }
         gameLogic.spawnRandomTile();
+        if(!isAnyMoveLegal(gameLogic)){
+            gameLogic.gameOver();
+        }
     }
 
     void moveDown(GameLogic gameLogic) {
@@ -92,6 +101,9 @@ public class MoveTile {
             }
         }
         gameLogic.spawnRandomTile();
+        if(!isAnyMoveLegal(gameLogic)){
+            gameLogic.gameOver();
+        }
     }
 
     void moveLeft(GameLogic gameLogic) {
@@ -122,6 +134,9 @@ public class MoveTile {
             }
         }
         gameLogic.spawnRandomTile();
+        if(!isAnyMoveLegal(gameLogic)){
+            gameLogic.gameOver();
+        }
     }
     private boolean canMoveRight(GameLogic gameLogic) {
         for (int y = 0; y < gameLogic.BOARD_SIZE; y++) {
@@ -165,5 +180,9 @@ public class MoveTile {
             }
         }
         return false;
+    }
+
+    private boolean isAnyMoveLegal(GameLogic gamelogic) {
+        return canMoveDown(gamelogic) || canMoveLeft(gamelogic) || canMoveRight(gamelogic) || canMoveUp(gamelogic);
     }
 }

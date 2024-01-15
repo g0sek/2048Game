@@ -7,6 +7,8 @@ public class Game2048 extends ApplicationAdapter {
 	private MainMenu mainMenu;
 	private DrawOnScreen drawOnScreen;
     private GameLogic gameLogic;
+	private EndGame endGame;
+	private TextureManager textureManager;
    public Score score = new Score();
     @Override
 	public void create() {
@@ -14,15 +16,15 @@ public class Game2048 extends ApplicationAdapter {
 	}
 
 	private void initializeDependencies() {
-        TextureManager textureManager = new TextureManager();
+        textureManager = new TextureManager();
         CameraHandler cameraHandler = new CameraHandler();
 		FontHandler fontHandler = new FontHandler();
 		gameLogic = new GameLogic(drawOnScreen, textureManager, cameraHandler, score);
-		drawOnScreen = new DrawOnScreen(cameraHandler, fontHandler, score, new MainMenu(drawOnScreen, textureManager), textureManager, gameLogic);
+		drawOnScreen = new DrawOnScreen(cameraHandler, fontHandler, score, new MainMenu(drawOnScreen, textureManager), textureManager, gameLogic, null);
 		mainMenu = new MainMenu(drawOnScreen, textureManager);
-
+		endGame = new EndGame(drawOnScreen, textureManager);
 		inputHandler = new InputHandler();
-		drawOnScreen = new DrawOnScreen(cameraHandler, new FontHandler(), score, new MainMenu(null, textureManager), textureManager, null);
+		drawOnScreen = new DrawOnScreen(cameraHandler, new FontHandler(), score, new MainMenu(null, textureManager), textureManager, null, endGame);
 		gameLogic = new GameLogic(drawOnScreen, textureManager, cameraHandler, score);
 		mainMenu = new MainMenu(drawOnScreen, textureManager);
 
@@ -41,7 +43,7 @@ public class Game2048 extends ApplicationAdapter {
 		update();
 		if (!mainMenu.startGame) {
 			drawOnScreen.drawMainMenu(); // Wywołaj drawMainMenu(), jeśli jeszcze nie zainicjowano
-		} else {
+		} else if(!endGame.endGame){
 			drawOnScreen.drawGameBoard(); // Dodaj rysowanie planszy gry w miejsce drawMainMenu()
 			drawOnScreen.drawScore();
 			if (!gameLogic.starterTilesRendered) {
@@ -49,6 +51,8 @@ public class Game2048 extends ApplicationAdapter {
 				gameLogic.spawnRandomTile();
 				gameLogic.starterTilesRendered = true; // Ustaw flagę na true, aby wiedzieć, że kafelki zostały już wylosowane
 			}
+		}else{
+			drawOnScreen.drawEndGame(textureManager);
 		}
 	}
 

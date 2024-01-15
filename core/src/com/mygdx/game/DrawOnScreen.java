@@ -10,11 +10,12 @@ public class DrawOnScreen {
     private final FontHandler fontHandler;
     private final Score score;
     public MainMenu mainMenu;
+    public EndGame endGame;
     private final TextureManager textureManager;
     public GameLogic gameLogic;
 
     public DrawOnScreen(CameraHandler cameraHandler, FontHandler fontHandler,
-                        Score score, MainMenu mainMenu, TextureManager textureManager, GameLogic gameLogic) {
+                        Score score, MainMenu mainMenu, TextureManager textureManager, GameLogic gameLogic, EndGame endGame) {
         this.batch = new SpriteBatch();
         this.cameraHandler = cameraHandler;
         this.fontHandler = fontHandler;
@@ -22,6 +23,8 @@ public class DrawOnScreen {
         this.mainMenu = mainMenu;
         this.textureManager = textureManager;
         this.gameLogic = gameLogic;
+        this.endGame = endGame;
+
         // Aktualizacja drawOnScreen w mainMenu
         if (mainMenu != null) {
             mainMenu.drawOnScreen = this;
@@ -60,5 +63,19 @@ public class DrawOnScreen {
         batch.end();
         mainMenu.handleMainMenu();
     }
+    public void drawEndGame(TextureManager textureManager){
 
+        batch.setProjectionMatrix(cameraHandler.camera.combined);
+        batch.begin();
+
+        batch.draw(textureManager.endGameboardTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        batch.end();
+        if(!endGame.endGame) {
+            endGame.endGame = true;
+        }
+        if(endGame.handleEndGame()){
+            gameLogic.restartGame();
+        }
+    }
 }

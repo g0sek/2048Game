@@ -7,7 +7,6 @@ import java.util.Random;
 public class GameLogic {
     public final int BOARD_SIZE = 4;
     public int[][] board;
-    public static boolean startGame = false;
     public boolean starterTilesRendered = false;
     private final Random random = new Random();
     private final DrawOnScreen drawOnScreen;
@@ -92,5 +91,20 @@ public class GameLogic {
         }
 
         drawOnScreen.batch.end();
+    }
+    public void gameOver(){
+        textureManager.reloadEndGameTexture();
+        drawOnScreen.drawEndGame(textureManager);
+    }
+
+    public void restartGame(){
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                board[y][x] = 0;
+            }
+        }
+        spawnRandomTile();
+        spawnRandomTile();
+        score.totalScore = 0;
     }
 }
